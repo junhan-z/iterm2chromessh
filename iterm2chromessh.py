@@ -10,7 +10,7 @@ BLUE = 'Blue Component'
 
 def color_to_hex(color):
     # Not sure about the exact conversion from real (0-1?) to integer
-    return '%02x' % int(256 * color)
+    return '%02x' % int(255 * color)
 
 def get_color_hex(color_dict): 
     rgb = []
