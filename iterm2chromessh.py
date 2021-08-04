@@ -12,23 +12,38 @@ def color_to_hex(color):
     # Not sure about the exact conversion from real (0-1?) to integer
     return '%02x' % int(256 * color)
 
+def get_color_hex(color_dict): 
+    red_hex = color_to_hex(color_dict[RED])
+    green_hex = color_to_hex(color_dict[GREEN])
+    blue_hex = color_to_hex(color_dict[BLUE])
+
+    return f'#{red_hex}{green_hex}{blue_hex}'
 
 def itermcolors_to_palette(iterm_colorscheme_file):
     with open(iterm_colorscheme_file, 'rb') as fd:
         content = plistlib.load(fd)
 
     palette = []
+    palette_keys = set()
     for color_index in range(16):
         key = f'Ansi {color_index} Color'
-        red_hex = color_to_hex(content[key][RED])
-        green_hex = color_to_hex(content[key][GREEN])
-        blue_hex = color_to_hex(content[key][BLUE])
+        palette_keys.add(key)
+        color_hex = get_color_hex(content[key])
 
-        palette.append(f'  "{color_index}": "#{red_hex}{green_hex}{blue_hex}"')
+        palette.append(f'  "{color_index}": "{color_hex}"')
 
+    print('Initial Palette:')
     print('{')
     print(",\n".join(palette))
     print('}')
+    
+    # Print the rest colors in hex format
+    for key in content.keys():
+        if key in palette_keys:
+            continue
+        print()
+        print(f'{key}:')
+        print(get_color_hex(content[key]))
 
 
 if __name__ == '__main__':
@@ -37,6 +52,3 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     itermcolors_to_palette(args.itermcolors)
-
-
-
