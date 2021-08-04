@@ -13,11 +13,13 @@ def color_to_hex(color):
     return '%02x' % int(256 * color)
 
 def get_color_hex(color_dict): 
-    red_hex = color_to_hex(color_dict[RED])
-    green_hex = color_to_hex(color_dict[GREEN])
-    blue_hex = color_to_hex(color_dict[BLUE])
+    rgb = []
+    for color in [RED, GREEN, BLUE]:
+        hex_value = color_to_hex(color_dict[color])
+        rgb.append(hex_value)
+    color_hex = ''.join(rgb)
 
-    return f'#{red_hex}{green_hex}{blue_hex}'
+    return f'#{color_hex}'
 
 def itermcolors_to_palette(iterm_colorscheme_file):
     with open(iterm_colorscheme_file, 'rb') as fd:
